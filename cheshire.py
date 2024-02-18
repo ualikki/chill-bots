@@ -187,4 +187,23 @@ async def statistic(inter):
     emb.add_field('Топ-10 пользователей', '\n'.join(f'<@{i[0]}>: {i[1]}' for i in stats[2]), inline=False)
     await inter.response.send_message(embed=emb)
 
+
+@bot.slash_command()
+async def russian_roulette(inter, bet: int, bullets: int = 1):
+    if not 0 < bullets < 7:
+        await inter.response.send_message('Револьвер шестизарядный')
+        return
+    if economy.balance(inter.author.id) >= bet > 0:
+        economy.send(inter.author.id, 2, bet)
+    else:
+        await inter.response.send_message('С деньгами всегда так: или их не хватает, или вы не хотите их отдавать')
+        return
+    if random.randint(1, 6) > bullets:
+        economy.send(2, inter.author.id, bet * bullets // 3 + bet)
+        await inter.response.send_message(f'Поздравляю, вы выиграли {bet * bullets // 3}')
+    else:
+        inter.author.timeout(duration=(dur := (random.randint(5, 15) - bullets)) * 60)
+        await inter.response.send_message(f'Очень жаль, но вы проиграли. Врачи спасут вашу жизнь,'
+                                          f' но им потребуется {dur} минут')
+
 bot.run(keys["cheshire"])
