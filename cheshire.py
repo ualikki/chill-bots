@@ -189,6 +189,7 @@ async def statistic(inter):
 
 
 @bot.slash_command()
+@commands.cooldown(5, 3600, commands.BucketType.user)
 async def russian_roulette(inter, bet: int, bullets: int = 1):
     if not 0 < bullets < 7:
         await inter.response.send_message('Револьвер шестизарядный')
@@ -199,8 +200,8 @@ async def russian_roulette(inter, bet: int, bullets: int = 1):
         await inter.response.send_message('С деньгами всегда так: или их не хватает, или вы не хотите их отдавать')
         return
     if random.randint(1, 6) > bullets:
-        economy.send(2, inter.author.id, bet * bullets // 3 + bet)
-        await inter.response.send_message(f'Поздравляю, вы выиграли {bet * bullets // 3}')
+        economy.send(2, inter.author.id, bet * bullets // 6 + bet)
+        await inter.response.send_message(f'Поздравляю, вы выиграли {bet * bullets // 6}')
     else:
         inter.author.timeout(duration=(dur := (random.randint(5, 15) - bullets)) * 60)
         await inter.response.send_message(f'Очень жаль, но вы проиграли. Врачи спасут вашу жизнь,'
