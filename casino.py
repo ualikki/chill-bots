@@ -49,7 +49,7 @@ async def on_ready():
         print(roll)
         with open("roll_id.txt", 'w') as file:
             file.write(str(roll))
-        wins = f'На рулетке: {result} {color}!\n'
+        wins = f'На рулетке: {result}{" " if color else "" + color}!\n'
         for bet in bets:
             print(bet)
             if bet[3] == result:
