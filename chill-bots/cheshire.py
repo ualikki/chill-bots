@@ -29,7 +29,7 @@ conn.commit()
 conn.close()
 CANT_EARN = [1109470825062600835, 1054826803602149447, 1198684792414277743, 1132598948201238558, 983610204975407114]
 
-bot = commands.Bot(command_prefix=commands.when_mentioned, intents=disnake.Intents.all(), test_guilds=[971007825218240532])
+bot = commands.Bot(command_prefix=commands.when_mentioned, intents=disnake.Intents.all(), test_guilds=[971007825218240532, 983432883714789476])
 TARGET_ROLE_NAME = "Постоялец"
 
 
