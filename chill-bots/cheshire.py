@@ -213,11 +213,11 @@ async def russian_roulette(inter, bet: int, bullets: int = 1):
 
 
 @bot.slash_command()
-async def dice(inter, bet: int, number: int = 0, minimum: int = 0, maximum: int = 0):
+async def dice(inter, bet: int, number: int = 0, minimum: int = 1, maximum: int = 6):
     if number * minimum or number * maximum or number * maximum * minimum:
         await inter.response.send_message('Можно ставить на число или на диапазон')
         return
-    if minimum < 1 and maximum != 0 or maximum > 6:
+    if minimum < 1 or maximum > 6 or maximum - minimum < 0 or maximum < 1 or minimum > 6:
         await inter.response.send_message('Вы, вероятно, не вполне знакомы с игральной костью. Я раскрою вам одну '
                                           'древнюю тайну: у кубика шесть граней, от одного до шести')
     if economy.balance(inter.author.id) >= bet > 0:
