@@ -29,7 +29,8 @@ conn.commit()
 conn.close()
 CANT_EARN = [1109470825062600835, 1054826803602149447, 1198684792414277743, 1132598948201238558, 983610204975407114]
 
-bot = commands.Bot(command_prefix=commands.when_mentioned, intents=disnake.Intents.all(), test_guilds=[971007825218240532, 983432883714789476])
+bot = commands.Bot(command_prefix=commands.when_mentioned, intents=disnake.Intents.all(),
+                   test_guilds=[983432883714789476])
 TARGET_ROLE_NAME = "Постоялец"
 
 
@@ -156,6 +157,9 @@ async def sql(inter, query: str):
 async def on_slash_command_error(inter, error):
     if isinstance(error, commands.CommandOnCooldown):
         await inter.response.send_message(f'Попробуйте снова через {round(error.retry_after, 2)} сек.')
+    else:
+        await inter.guild.get_channel(1209893365483573318).send(str(error))
+        raise error
 
 
 @bot.slash_command()
@@ -200,11 +204,35 @@ async def russian_roulette(inter, bet: int, bullets: int = 1):
         await inter.response.send_message('С деньгами всегда так: или их не хватает, или вы не хотите их отдавать')
         return
     if random.randint(1, 6) > bullets:
-        economy.send(2, inter.author.id, bet * bullets // 6 + bet)
-        await inter.response.send_message(f'Поздравляю, вы выиграли {bet * bullets // 6}')
+        economy.send(2, inter.author.id, bet * bullets // 3 + bet)
+        await inter.response.send_message(f'Поздравляю, вы выиграли {bet + bet * bullets // 3}')
     else:
-        inter.author.timeout(duration=(dur := (random.randint(5, 15) - bullets)) * 60)
+        await inter.author.timeout(duration=(dur := (random.randint(5, 15) - bullets)) * 60)
         await inter.response.send_message(f'Очень жаль, но вы проиграли. Врачи спасут вашу жизнь,'
                                           f' но им потребуется {dur} минут')
+
+
+@bot.slash_command()
+async def dice(inter, bet: int, number: int = 0, minimum: int = 0, maximum: int = 0):
+    if number * minimum or number * maximum or number * maximum * minimum:
+        await inter.response.send_message('Можно ставить на число или на диапазон')
+        return
+    if minimum < 1 and maximum != 0 or maximum > 6:
+        await inter.response.send_message('Вы, вероятно, не вполне знакомы с игральной костью. Я раскрою вам одну '
+                                          'древнюю тайну: у кубика шесть граней, от одного до шести')
+    if economy.balance(inter.author.id) >= bet > 0:
+        economy.send(inter.author.id, 2, bet)
+        rolled_number = random.randint(1, 6)
+        if number:
+            minimum = maximum = number
+        if minimum <= rolled_number <= maximum:
+            economy.send(2, inter.author.id, bet * 6 // (maximum - minimum + 1))
+            await inter.response.send_message(f'Поздравляю, вы выиграли {bet * 6 // (maximum - minimum + 1)}')
+            return
+        else:
+            await inter.response.send_message('К сожалению, вы не угадали')
+            return
+    else:
+        await inter.response.send_message('С деньгами всегда так: или их не хватает, или вы не хотите их отдавать')
 
 bot.run(keys["cheshire"])

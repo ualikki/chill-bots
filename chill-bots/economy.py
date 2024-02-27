@@ -93,10 +93,7 @@ def bet_number(roll: int, user: int, amount: int, number: int):
 def get_stats():
     conn = sqlite3.connect('economy.db')
     cursor = conn.cursor()
-    print(1)
     all_money = sum(i[0] for i in cursor.execute('SELECT balance FROM users').fetchall())
-    print(all_money)
-    stats = cursor.execute('SELECT * FROM users ORDER BY balance').fetchall()[::-1][:11]
-    print(3)
+    stats = cursor.execute('SELECT * FROM users ORDER BY balance DESC LIMIT 10').fetchall()
     conn.close()
     return all_money, stats[0], stats[1:]
