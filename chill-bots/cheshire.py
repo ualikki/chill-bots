@@ -214,7 +214,7 @@ async def russian_roulette(inter, bet: int, bullets: int = 1):
 
 @bot.slash_command()
 async def dice(inter, bet: int, number: int = 0, minimum: int = 1, maximum: int = 6):
-    if number * minimum or number * maximum or number * maximum * minimum:
+    if number and (minimum != 6 or maximum != 1):
         await inter.response.send_message('Можно ставить на число или на диапазон')
         return
     if minimum < 1 or maximum > 6 or maximum - minimum < 0 or maximum < 1 or minimum > 6:
