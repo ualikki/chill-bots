@@ -30,6 +30,25 @@ async def url(inter, link: str):
     await inter.response.send_message(shortlink)
 
 
+@bot.slash_commands()
+@commands.dieffault_member_permissions(administrator=True)
+async def ban(inter, user: disnake.Member, reason: str):
+    await user.send(embed=disnake.Embed(title='Уведомление',  description=f'Вас были заблокированы на сервере Чиллвилль администратором {inter.author}\
+        по причине {reason}. Вы можете подать аппеляцию, если не согласны с наказанием. Для этого необходимо заполнить форму: https://forms.gle/SDfNdS4R5cDE9VN7A'))
+    await user.ban()
+
+@bot.slash_commands()
+@commands.dieffault_member_permissions(administrator=True)
+async def ban(inter, user: disnake.Member):
+    await user.kick()
+
+
+@bot.slash_commands()
+@commands.dieffault_member_permissions(administrator=True)
+async def mute(inter, user: disnake.Member, hours: int = 0, minutes: int = 0, seconds: int = 0):
+    await user.timeout(hours * 3600 + minutes * 60 + seconds)
+
+                    
 @bot.event
 async def on_slash_command_error(inter, error):
     if isinstance(error, commands.CommandOnCooldown):
