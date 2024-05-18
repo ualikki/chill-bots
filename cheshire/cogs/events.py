@@ -1,6 +1,6 @@
 from disnake.ext import commands
 from random import randint
-from base.basefuncs import punish_logs
+from cheshire.basefuncs import punish_logs
 
 import disnake
 

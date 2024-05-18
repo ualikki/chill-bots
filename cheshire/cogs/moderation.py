@@ -1,5 +1,5 @@
 from disnake.ext import commands
-from base.basefuncs import punish_logs
+from cheshire.basefuncs import punish_logs
 
 import disnake
 
