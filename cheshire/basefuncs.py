@@ -1,4 +1,4 @@
-from cheshire.config import keys
+from config import keys
 
 import disnake
 import psycopg2
@@ -21,11 +21,24 @@ def connect():
 
 
 def create_user(user: disnake.Member):
+    print(user.id)
     con = connect()
+    cur = con.cursor()
     a = True
-    if ...:
+    cur.execute(f"SELECT uid FROM users WHERE uid = {user.id}")
+    account = cur.fetchone()
+    if account:
         a = False
     else:
-        ...
+        cur.execute(f"INSERT INTO users(uid) VALUES ({user.id})")
+        con.commit()
     con.close()
     return a
+
+
+def update_money(user: disnake.Member, money):
+    con = connect()
+    cur = con.cursor()
+    cur.execute(f"UPDATE users SET money = money + {money} WHERE uid = {user.id}")
+    con.commit()
+    con.close()

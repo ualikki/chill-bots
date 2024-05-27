@@ -5,12 +5,12 @@ class Other(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
+    @commands.slash_command()
     @commands.default_member_permissions(administrator=True)
     async def write(self, inter, message):
         await inter.channel.send(message)
 
-    @commands.Cog.listener()
+    @commands.slash_command()
     async def url(self, inter, link: str):
         import requests
         res = requests.post('https://api.short.io/links', json={

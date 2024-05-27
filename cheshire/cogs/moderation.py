@@ -1,5 +1,5 @@
 from disnake.ext import commands
-from cheshire.basefuncs import punish_logs
+from basefuncs import punish_logs
 
 import disnake
 
@@ -8,7 +8,7 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
+    @commands.slash_command()
     @commands.default_member_permissions(administrator=True)
     async def ban(self, inter, user: disnake.Member, reason: str):
         await user.send(
@@ -24,7 +24,7 @@ class Moderation(commands.Cog):
         emb.add_field('Причина', reason)
         await punish_logs(emb)
 
-    @commands.Cog.listener()
+    @commands.slash_command()
     @commands.default_member_permissions(administrator=True)
     async def kick(self, inter, user: disnake.Member, reason: str):
         await user.kick()
@@ -34,7 +34,7 @@ class Moderation(commands.Cog):
         emb.add_field('Причина', reason)
         await punish_logs(emb)
 
-    @commands.Cog.listener()
+    @commands.slash_command()
     @commands.default_member_permissions(administrator=True)
     async def mute(self, inter, user: disnake.Member, reason: str, hours: int = 0, minutes: int = 0, seconds: int = 0):
         await user.timeout(duration=hours * 3600 + minutes * 60 + seconds)

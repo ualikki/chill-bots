@@ -5,7 +5,7 @@ from os import listdir
 import disnake
 
 bot = commands.Bot(command_prefix=commands.when_mentioned, intents=disnake.Intents.all(),
-                   test_guilds=[983432883714789476, 971007825218240532])
+                   test_guilds=[971007825218240532, 983432883714789476])
 
 for name in listdir('cogs'):
     if name.endswith('.py'):
