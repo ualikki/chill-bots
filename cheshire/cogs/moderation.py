@@ -1,5 +1,5 @@
 from disnake.ext import commands
-from basefuncs import punish_logs
+from basefuncs import punish_logs  # См. events
 
 import disnake
 
@@ -13,7 +13,7 @@ class Moderation(commands.Cog):
     async def ban(self, inter, user: disnake.Member, reason: str):
         await user.send(
             embed=disnake.Embed(title='Уведомление',
-                                description=f'Вас были заблокированы на сервере Чиллвилль администратором'
+                                description=f'Вас были заблокированы на сервере {inter.guild.name} администратором'
                                             f' {inter.author} по причине "{reason}". Вы можете подать аппеляцию, если '
                                             f'не согласны с наказанием. Для этого необходимо заполнить форму: '
                                             f'https://forms.gle/SDfNdS4R5cDE9VN7A'))
